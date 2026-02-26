@@ -1,0 +1,22 @@
+{
+  "name": "clip-generator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ai": "^4.3.16",
+    "@ai-sdk/anthropic": "^1.2.12",
+    "openai": "^4.93.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/bun": "latest",
+    "typescript": "5.9.2"
+  }
+}

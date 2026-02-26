@@ -1,0 +1,30 @@
+name = "creatorkit-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── KV: job state ────────────────────────────────────────────────────
+[[kv_namespaces]]
+binding = "JOB_STATE"
+id = "REPLACE_WITH_KV_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
+
+# ── R2: video / asset storage ────────────────────────────────────────
+[[r2_buckets]]
+binding = "VIDEOS"
+bucket_name = "creatorkit-videos"
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "creatorkit-assets"
+
+# ── Queues: async job processing ─────────────────────────────────────
+[[queues.producers]]
+binding = "JOB_QUEUE"
+queue = "creatorkit-jobs"
+
+[[queues.consumers]]
+queue = "creatorkit-jobs"
+max_batch_size = 10
+max_batch_timeout = 30
+max_retries = 3
