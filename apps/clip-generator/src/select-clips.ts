@@ -1,7 +1,11 @@
 import { generateObject } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { z } from "zod";
 import type { Segment } from "./transcribe";
+
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 const ClipSchema = z.object({
   clips: z
@@ -61,7 +65,7 @@ export async function selectClips(
     .join("\n");
 
   const { object } = await generateObject({
-    model: anthropic("claude-opus-4-6"),
+    model: openrouter("anthropic/claude-opus-4-6"),
     schema: ClipSchema,
     prompt: `You are an expert social media content editor who specializes in creating viral short-form clips from long-form podcasts.
 

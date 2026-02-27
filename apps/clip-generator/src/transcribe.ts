@@ -1,4 +1,7 @@
-import OpenAI from "openai";
+import { experimental_transcribe as aiTranscribe } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { createGroq } from "@ai-sdk/groq";
+import type { TranscriptionModel } from "ai";
 import fs from "fs";
 import path from "path";
 import { $ } from "bun";
@@ -21,14 +24,12 @@ export function resolveTranscriberMode(): TranscriberMode | null {
   return null;
 }
 
-function makeClient(mode: "groq" | "openai"): OpenAI {
+function makeModel(mode: "groq" | "openai"): TranscriptionModel {
   if (mode === "groq") {
-    return new OpenAI({
-      apiKey: process.env.GROQ_API_KEY,
-      baseURL: "https://api.groq.com/openai/v1",
-    });
+    const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
+    return groq.transcription("whisper-large-v3-turbo");
   }
-  return new OpenAI(); // uses OPENAI_API_KEY
+  return openai.transcription("whisper-1");
 }
 
 /**
@@ -56,16 +57,16 @@ export async function transcribe(
   if (mode === "local") {
     segments = await transcribeLocal(audioPath, cacheDir);
   } else {
-    const client = makeClient(mode);
+    const model = makeModel(mode);
     const fileSize = fs.statSync(audioPath).size;
 
     if (fileSize <= CHUNK_SIZE_BYTES) {
-      segments = await transcribeFile(client, audioPath);
+      segments = await transcribeFile(model, audioPath);
     } else {
       console.log(
         `   File is ${(fileSize / 1024 / 1024).toFixed(0)} MB, splitting into chunks...`
       );
-      segments = await transcribeInChunks(client, audioPath, cacheDir);
+      segments = await transcribeInChunks(model, audioPath, cacheDir);
     }
   }
 
@@ -76,25 +77,21 @@ export async function transcribe(
 // ── API path ──────────────────────────────────────────────────────────────────
 
 async function transcribeFile(
-  openai: OpenAI,
+  model: TranscriptionModel,
   audioPath: string
 ): Promise<Segment[]> {
-  const response = await openai.audio.transcriptions.create({
-    file: fs.createReadStream(audioPath),
-    model: "whisper-1",
-    response_format: "verbose_json",
-    timestamp_granularities: ["segment"],
-  });
+  const audio = await fs.promises.readFile(audioPath);
+  const result = await aiTranscribe({ model, audio });
 
-  return (response.segments ?? []).map((s) => ({
-    start: s.start,
-    end: s.end,
+  return (result.segments ?? []).map((s) => ({
+    start: s.startSecond,
+    end: s.endSecond,
     text: s.text.trim(),
   }));
 }
 
 async function transcribeInChunks(
-  openai: OpenAI,
+  model: TranscriptionModel,
   audioPath: string,
   workDir: string
 ): Promise<Segment[]> {
@@ -115,7 +112,7 @@ async function transcribeInChunks(
     await $`ffmpeg -y -i ${audioPath} -ss ${i * chunkSeconds} -t ${chunkSeconds} -acodec copy ${chunkPath}`;
 
     console.log(`   Transcribing chunk ${i + 1}/${numChunks}...`);
-    for (const seg of await transcribeFile(openai, chunkPath)) {
+    for (const seg of await transcribeFile(model, chunkPath)) {
       allSegments.push({ ...seg, start: seg.start + timeOffset, end: seg.end + timeOffset });
     }
     timeOffset += chunkSeconds;
