@@ -1,1 +1,67 @@
-[]
+[
+  {
+    "start": 0,
+    "end": 5.3,
+    "text": "Welcome to the show. Today we're talking about artificial intelligence and the future of technology."
+  },
+  {
+    "start": 5.7,
+    "end": 13.84,
+    "text": "I think one of the most counterintuitive things about AI is that the models that seem the most impressive today might not be the ones that matter most in five years."
+  },
+  {
+    "start": 14.18,
+    "end": 18.52,
+    "text": "The real breakthrough will come from systems that can reason, not just pattern match."
+  },
+  {
+    "start": 18.86,
+    "end": 25.48,
+    "text": "Most people assume that scaling is the only path forward, but that's actually a controversial take in the research community."
+  },
+  {
+    "start": 25.9,
+    "end": 29.54,
+    "text": "Some of the best researchers I know believe we're hitting fundamental limits."
+  },
+  {
+    "start": 29.92,
+    "end": 33.86,
+    "text": "Here's a story about a conversation I had with a researcher at a major lab."
+  },
+  {
+    "start": 34.14,
+    "end": 40,
+    "text": "She told me that the internal results they weren't publishing were actually more surprising than what they were showing the public."
+  },
+  {
+    "start": 40.4,
+    "end": 43.78,
+    "text": "That's the kind of vulnerable honesty you rarely get in this industry."
+  },
+  {
+    "start": 43.78,
+    "end": 52.78,
+    "text": "My prediction for 2025 is that we'll see the first truly agentic systems deployed in production at scale, not demos, actual production systems."
+  },
+  {
+    "start": 53.72,
+    "end": 58.4,
+    "text": "And that's going to change everything about how we think about software engineering as a profession."
+  },
+  {
+    "start": 58.4,
+    "end": 63.2,
+    "text": "The funny thing is, most software engineers I talk to are not worried at all."
+  },
+  {
+    "start": 63.48,
+    "end": 65.88,
+    "text": "They think AI is just a better autocomplete."
+  },
+  {
+    "start": 66.16,
+    "end": 68.46,
+    "text": "That's hilarious and also kind of terrifying."
+  }
+]

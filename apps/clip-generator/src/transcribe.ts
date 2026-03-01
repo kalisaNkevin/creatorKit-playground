@@ -57,15 +57,16 @@ export async function transcribe(
     segments = await transcribeLocal(audioPath, cacheDir);
   } else {
     const client = makeClient(mode);
+    const whisperModel = mode === "groq" ? "whisper-large-v3" : "whisper-1";
     const fileSize = fs.statSync(audioPath).size;
 
     if (fileSize <= CHUNK_SIZE_BYTES) {
-      segments = await transcribeFile(client, audioPath);
+      segments = await transcribeFile(client, audioPath, whisperModel);
     } else {
       console.log(
         `   File is ${(fileSize / 1024 / 1024).toFixed(0)} MB, splitting into chunks...`
       );
-      segments = await transcribeInChunks(client, audioPath, cacheDir);
+      segments = await transcribeInChunks(client, audioPath, cacheDir, whisperModel);
     }
   }
 
@@ -77,11 +78,12 @@ export async function transcribe(
 
 async function transcribeFile(
   openai: OpenAI,
-  audioPath: string
+  audioPath: string,
+  model: string
 ): Promise<Segment[]> {
   const response = await openai.audio.transcriptions.create({
     file: fs.createReadStream(audioPath),
-    model: "whisper-1",
+    model,
     response_format: "verbose_json",
     timestamp_granularities: ["segment"],
   });
@@ -96,7 +98,8 @@ async function transcribeFile(
 async function transcribeInChunks(
   openai: OpenAI,
   audioPath: string,
-  workDir: string
+  workDir: string,
+  model: string
 ): Promise<Segment[]> {
   const chunksDir = path.join(workDir, "chunks");
   fs.mkdirSync(chunksDir, { recursive: true });
@@ -115,7 +118,7 @@ async function transcribeInChunks(
     await $`ffmpeg -y -i ${audioPath} -ss ${i * chunkSeconds} -t ${chunkSeconds} -acodec copy ${chunkPath}`;
 
     console.log(`   Transcribing chunk ${i + 1}/${numChunks}...`);
-    for (const seg of await transcribeFile(openai, chunkPath)) {
+    for (const seg of await transcribeFile(openai, chunkPath, model)) {
       allSegments.push({ ...seg, start: seg.start + timeOffset, end: seg.end + timeOffset });
     }
     timeOffset += chunkSeconds;

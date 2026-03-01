@@ -20,5 +20,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@ai-sdk/groq": "^3.0.25",
+    "ai": "^6.0.103"
+  }
 }

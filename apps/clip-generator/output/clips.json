@@ -1,0 +1,47 @@
+[
+  {
+    "title": "AI’s Counterintuitive Future",
+    "startTime": 5,
+    "endTime": 18,
+    "hook": "I think one of the most counterintuitive things about AI is that the models that seem the most impressive today might not be the ones that matter most in five years.",
+    "category": "prediction",
+    "reason": "It delivers a surprising, counterintuitive insight that hooks listeners immediately and sparks curiosity about AI’s trajectory.",
+    "estimatedViralScore": 9
+  },
+  {
+    "title": "Why Scaling Might Fail",
+    "startTime": 18,
+    "endTime": 29,
+    "hook": "Most people assume that scaling is the only path forward, but that's actually a controversial take in the research community.",
+    "category": "controversial",
+    "reason": "By challenging a common belief, this clip sparks debate and engagement from both skeptics and supporters.",
+    "estimatedViralScore": 9
+  },
+  {
+    "title": "2025 Agentic Systems Coming Soon!",
+    "startTime": 43,
+    "endTime": 58,
+    "hook": "My prediction for 2025 is that we'll see the first truly agentic systems deployed in production at scale, not demos, actual production systems.",
+    "category": "prediction",
+    "reason": "A specific future forecast creates anticipation and positions the clip as a must-watch forecast.",
+    "estimatedViralScore": 9
+  },
+  {
+    "title": "Inside the Lab’s Secret Results",
+    "startTime": 29,
+    "endTime": 43,
+    "hook": "Here's a story about a conversation I had with a researcher at a major lab.",
+    "category": "story",
+    "reason": "A personal, vulnerable anecdote offers authenticity and relatability, making it highly shareable.",
+    "estimatedViralScore": 8
+  },
+  {
+    "title": "Engineers Think AI Is Just Autocomplete",
+    "startTime": 58,
+    "endTime": 68,
+    "hook": "The funny thing is, most software engineers I talk to are not worried at all.",
+    "category": "funny",
+    "reason": "Humor combined with a surprising industry insight drives quick, repeatable sharing.",
+    "estimatedViralScore": 8
+  }
+]

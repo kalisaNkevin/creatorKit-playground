@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { groq } from "@ai-sdk/groq";
 import { z } from "zod";
 import type { Segment } from "./transcribe";
 
@@ -22,15 +22,10 @@ const ClipSchema = z.object({
             "Opening sentence that grabs attention in the first 3 seconds"
           ),
         category: z
-          .enum([
-            "insight",
-            "story",
-            "controversial",
-            "funny",
-            "actionable",
-            "prediction",
-          ])
-          .describe("Content category"),
+          .string()
+          .describe(
+            'Content category — must be one of: insight, story, controversial, funny, actionable, prediction'
+          ),
         reason: z
           .string()
           .describe("Why this clip will perform well on social media"),
@@ -47,21 +42,17 @@ const ClipSchema = z.object({
 
 export type Clip = z.infer<typeof ClipSchema>["clips"][number];
 
-/**
- * Uses Vercel AI SDK generateObject to identify the 5 best clips
- * from the podcast transcript for short-form social media content.
- */
+
 export async function selectClips(
   segments: Segment[],
   podcastTitle: string
 ): Promise<Clip[]> {
-  // Build a condensed transcript with timestamps
   const transcript = segments
     .map((s) => `[${formatTime(s.start)}–${formatTime(s.end)}] ${s.text}`)
     .join("\n");
 
   const { object } = await generateObject({
-    model: anthropic("claude-opus-4-6"),
+    model: groq("openai/gpt-oss-20b"),
     schema: ClipSchema,
     prompt: `You are an expert social media content editor who specializes in creating viral short-form clips from long-form podcasts.
 

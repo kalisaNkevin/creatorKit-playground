@@ -36,7 +36,7 @@ function checkDeps() {
   for (const bin of ["ffmpeg", "ffprobe"]) {
     if (Bun.spawnSync(["which", bin]).exitCode !== 0) missing.push(bin);
   }
-  if (!process.env.ANTHROPIC_API_KEY) missing.push("ANTHROPIC_API_KEY");
+  if (!process.env.GROQ_API_KEY) missing.push("GROQ_API_KEY");
 
   const transcriberMode = resolveTranscriberMode();
   if (!transcriberMode) {
@@ -58,7 +58,7 @@ function checkDeps() {
     local: "local whisper CLI  (offline)",
   };
   console.log(`\nProviders:`);
-  console.log(`  Clip selection → Claude Opus 4.6`);
+  console.log(`  Clip selection → Groq GPT-3.5 Turbo (free)`);
   console.log(`  Transcription  → ${transcriberLabel[transcriberMode!]}`);
 }
 
